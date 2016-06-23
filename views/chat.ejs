@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="javascripts/custom.js"></script>
+    <script src="javascripts/socket.io.js"></script>
+    <script src="javascripts/chat_socket.js"></script>
+  </head>
+  <body>
+    <h1>CHAT</h1>
+    <div id="messages">
+      <% messages.forEach( function(element) { %>
+        <div>
+          <span class="author"><%= element['author'] %></span>
+          <span class="message"><%= element['message'] %></span>
+        </div>
+      <% }); %>
+    </div>
+    <input type="text" id="message_input"/>
+    <button onclick="sendMessage()">send</button>
+    <div id="chatlog"></div>
+  </body>
+</html>

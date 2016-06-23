@@ -1,0 +1,5 @@
+/node_modules/
+/npm-debug.log
+/config/config.js
+/models/testmodel.js
+/routes/testroute.js
