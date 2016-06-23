@@ -1,9 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-/* Get user and chat model for handling database operations  */
-// TODO rename chat table to messages
-var chat_m = require('../models/chat');
+/* Get user and message model for handling database operations  */  
+var message_m = require('../models/message');
 var user_m = require('../models/user');
 
 /* Middleware function for simple authentication via users session cookie */
@@ -22,7 +21,7 @@ var chatSessionTokenSecret = require('../config/config.js')["session_settings"][
  * function. If authentication succeeds it grabs all stored chat *
  * messages from message model and sends them to rendered view   */
 router.get('/', authMiddleware, function (req, res) {
-  chat_m.getMessages( function(err, rows) {
+  message_m.getMessages( function(err, rows) {
     res.locals.messages = rows;
     res.render('chat');
   });

@@ -9,7 +9,7 @@ module.exports = function(port) {
 	
 	var validator = require('validator');
 	var socket = require('socket.io');
-  var chat_m = require('../models/chat');
+  var message_m = require('../models/message');
 
 	var chatSocket = socket.listen(port);
 
@@ -45,7 +45,7 @@ module.exports = function(port) {
           var escaped_message = validator.escape(data["message"]);
           chatSocket.sockets.emit("message_to_client" , 
                                 { author: username, message: escaped_message });
-          chat_m.storeMessage( username, escaped_message, function (err, id){});
+          message_m.storeMessage( username, escaped_message, function (err, id){});
           /* Set time difference (6 seconds from now) for sending new message */
           deltaTime = new Date(new Date().getTime() + 1*6000);
         });

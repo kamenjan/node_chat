@@ -1,4 +1,4 @@
-var chat = {};
+var messageModel = {};
 
 /**
  * [TODO update, we use knex now] 
@@ -17,14 +17,14 @@ var knex = require('knex')({
   }
 });
 
-chat.getMessages = function(callback) {
+messageModel.getMessages = function(callback) {
   knex.select('author', 'message').from('messages')
   .asCallback(function(err, rows) {
     callback(err, rows);
   });
 }; 
 
-chat.storeMessage = function(author, message, callback) {
+messageModel.storeMessage = function(author, message, callback) {
   knex.table('messages').insert(
     {author: author, message: message}
   ).asCallback(function(err, id) {
@@ -32,7 +32,7 @@ chat.storeMessage = function(author, message, callback) {
   });
 }; 
 
-// chat.deleteAll = function(callback) {
+// message.deleteAll = function(callback) {
 //   console.log('storeMessage se starta');
 //   knex.table('messages').insert(
 //     {author: 'author', message: message}
@@ -42,5 +42,5 @@ chat.storeMessage = function(author, message, callback) {
 //   // knex.table('accounts').insert({account_name: 'knex', user_id: rows[0]});
 // }; 
 
-module.exports = chat;
+module.exports = messageModel;
 
