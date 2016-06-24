@@ -6,6 +6,5 @@ var router = express.Router();
 router.use('/', require('./home'));
 router.use('/chat', require('./chat'));
 router.use('/user', require('./user'));
-router.use('/test', require('./testroute'));
 
 module.exports = router;
