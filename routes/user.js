@@ -48,6 +48,30 @@ router.post('/login', function(req, res) {
   });
 });
 
+/* Handle register GET request and render a register form */
+router.get('/register', function(req, res) {
+  res.render('register_form', { accountAction: 'register' });
+});
+
+/* Handle register POST request and insert data as user via user model.    *
+ * IMPORTANT! This function is too simple for production! Please implement * 
+ * preferred solution based on project needs. You will also need to wire   *
+ * front end view for registration. Look at login logic.                   */
+router.post('/register', function(req, res) {
+
+  /* Collect POST data from request body */
+  var userName = req.body.username;
+  var password = req.body.password;
+
+  /* Add user via user model                                        *
+   * Uncomment following add() for register to work, but make sure  *
+   * you take all the necessary security steps for inserting user   *
+   * generated data.                                                */
+  // user_m.add(userName, password);
+  res.redirect('/');
+
+});
+
 /* logout GET */
 router.get('/logout', function(req, res) {
   req.chat_session.reset();

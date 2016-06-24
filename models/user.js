@@ -18,27 +18,16 @@ var knex = require('knex')({
   }
 });
 
-/* [OLD] This function does not yet use knex and should be removed/updated  */
+/* Very simple user registration function.     *
+ * IMPORTANT! You will have to choose your     *
+ * own registration method and specifications. */
 user.add = function(userName, password) {
-  pg.connect(connection, function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
-
-    var hashPassword = crypto.createHash('sha256').update(password).digest('hex');
-
-    client.query(
-      "INSERT INTO users (user_name, password) VALUES ($1, $2)", 
-      [userName, hashPassword], function(err, result) {
-      //call `done()` to release the client back to the pool 
-      done();
-   
-      if(err) {
-        return console.error('error running query', err);
-      }
-      console.log(result);
-    });
-  });
+  
+  var hashPassword = crypto.createHash('sha256').update(password).digest('hex');
+  knex('users').insert({user_name: userName, password: hashPassword})
+  .catch(function(error) {
+    console.error(error)
+  });;
 }; 
 
 user.login = function(userName, password, callback) {
