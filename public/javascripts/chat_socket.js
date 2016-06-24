@@ -11,6 +11,7 @@ var token;
 var socket;
 
 function connect(token) {
+  /* TODO: make host and port address variable based on environment flag */
   socket = io.connect("localhost:1337", {
     query: 'token=' + token,
     forceNew: true
@@ -38,6 +39,7 @@ function sendMessage() {
 
 $.ajax({
   type: 'POST',
+  /* TODO: make host and port address variable based on environment flag */
   url: 'http://localhost:3000/chat/auth',
   // Send session cookie data to chat socket authentication API
   data: document.cookie
