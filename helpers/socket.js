@@ -1,10 +1,9 @@
-/* Socket helper is run right after application setup. It sets up a new     *
- * socket that listens on port 1337 for incoming connections. Those are     *
- * made when authenticated users visit '/chat'. Besides listening and       *
- * emitting, this helper has some other basic functionality (authenticating * 
- * connection requests, escaping received strings and enforcing anti spam   *
- * mechanism using delta time)                                              *
- * TODO: fix anti spam, to only lock out sender not all connected clients   */
+/* Socket helper is run right after application setup. It sets up a     *
+ * new server side socket that listens on port 1337 for incoming        *
+ * connections. Those are made when authenticated users visit '/chat'.  *
+ * Besides listening and emitting, this helper has some other basic     *
+ * functionality (authenticating connection requests, escaping received *
+ * strings and enforcing anti spam mechanism using delta time)          */
 module.exports = function(port) {
 	
 	var validator = require('validator');
@@ -32,8 +31,9 @@ module.exports = function(port) {
 	
 		/* Trigger when server receives event named 'message_to_server' */
     socket.on('message_to_server', function(data) {
-      /* Check if 6 seconds have passed since last event to prevent spamming */
+      /* Check if 2 seconds have passed since last event to prevent spamming */
       if (new Date() > deltaTime) {
+        console.log(data);
         /* Grab token from clients request object. Use jsonwebtoken    *
          * to decrypt its content and save this clients username value */
         var token = socket.request._query.token;
@@ -46,8 +46,8 @@ module.exports = function(port) {
           chatSocket.sockets.emit("message_to_client" , 
                                 { author: username, message: escaped_message });
           message_m.storeMessage( username, escaped_message, function (err, id){});
-          /* Set time difference (6 seconds from now) for sending new message */
-          deltaTime = new Date(new Date().getTime() + 1*6000);
+          /* Set time difference (2 seconds from now) for sending new message */
+          deltaTime = new Date(new Date().getTime() + 1*2000);
         });
       }
     });
