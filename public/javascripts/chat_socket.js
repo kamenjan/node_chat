@@ -30,7 +30,11 @@ function connect(token) {
     $("#messages").append( "<div><span>" + data['author'] + "</span>" + 
                           "<span>" + data['message'] + "</span></div>" );
   });
-  
+
+  socket.on("update_client_list", function(data) {
+    console.log(data);
+  });
+
   socket.on('error', function (err) {
    alert(JSON.stringify(err));
   });

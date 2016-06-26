@@ -24,8 +24,15 @@ module.exports = function(port) {
     handshake: true
   }));
 
+  /* Connected clients list */
+  var connectedClients = {};
+
 	chatSocket.sockets.on('connection', function(socket) {
 		console.log('user connected');
+    
+    /* Add client to connectedClients and send list to all clients for update */
+    connectedClients[socket.decoded_token.username] = 'client';
+    chatSocket.sockets.emit("update_client_list" , connectedClients);
 
     var deltaTime = new Date();
 	
@@ -55,6 +62,9 @@ module.exports = function(port) {
     /* Trigger when client socket disconnects */
     socket.on('disconnect', function(){
     	console.log('user disconnected');
+      /* Remove client from connectedClients and send list to all clients for update */
+      delete connectedClients[socket.decoded_token.username];
+      chatSocket.sockets.emit("update_client_list" , connectedClients);
   	});
 	});
 };
