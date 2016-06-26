@@ -1,24 +1,29 @@
-// Front end javascript for connecting to and handling our custom chat socket
-// running on port 1337. we first ask server for token with AJAX call. we only
-// get this token if we already have general application session cookie set up 
-// (by being authenticated on login). user then sends this token back for 
-// successful client/server handshake process using token. This connects client
-// to chat socket.
-// TODO: set up a front end framework for modularization and include js files
-// in coherent and organized manner 
+/* Front end javascript module for connecting to and handling our custom chat *
+ * socket running on port 1337. We first ask server for token with AJAX call. *
+ * we only get this token if we already have general application session      *
+ * cookie set up (by being authenticated on login). User then sends this      *
+ * token back for successful client/server handshake process using token.     *
+ * This connects client to chat socket.                                       *
+ * TODO: set up a front end framework for modularization and                  *
+ * include js files in coherent and organized manner                          */
 
 var token;
 var socket;
 
+/* Set socket connection parameters */
+/* URL for chat socket authentication AJAX call */
+var URL = location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '');
+/* Chat socket address */
+var chatSocketPath = location.hostname + ":" + 1337;
+
 function connect(token) {
-  /* TODO: make host and port address variable based on environment flag */
-  socket = io.connect("localhost:1337", {
+  socket = io.connect(chatSocketPath, {
     query: 'token=' + token,
     forceNew: true
   });
 
   socket.on('connect', function (data) {
-   alert('you are now connected to the websocket server');
+   // alert('you are now connected to the websocket server');
   });
 
   socket.on("message_to_client", function(data) {
@@ -39,8 +44,7 @@ function sendMessage() {
 
 $.ajax({
   type: 'POST',
-  /* TODO: make host and port address variable based on environment flag */
-  url: 'http://localhost:3000/chat/auth',
+  url: URL + '/chat/auth',
   // Send session cookie data to chat socket authentication API
   data: document.cookie
 }).done(function (data) {
