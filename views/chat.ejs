@@ -18,8 +18,6 @@
         </div>
       <% }); %>
     </div>
-    <input type="text" id="message_input"/>
-    <button onclick="sendMessage()">send</button>
-    <div id="chatlog"></div>
+    <input type="text" id="message_input" onKeyPress="sendMessage(event)"/>
   </body>
 </html>

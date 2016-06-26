@@ -27,7 +27,6 @@ function connect(token) {
   });
 
   socket.on("message_to_client", function(data) {
-    console.log(data);
     $("#messages").append( "<div><span>" + data['author'] + "</span>" + 
                           "<span>" + data['message'] + "</span></div>" );
   });
@@ -37,15 +36,19 @@ function connect(token) {
   });
 };
 
-function sendMessage() {
-  var msg = document.getElementById("message_input").value;
-  socket.emit("message_to_server", { message : msg});
+function sendMessage(e) {
+  /* If return key was pressed send message to server and empty field value */
+  if(e && e.keyCode == 13) {
+    var msg = document.getElementById("message_input").value;
+    socket.emit("message_to_server", { message : msg});
+    document.getElementById("message_input").value = "";
+  }
 };
 
 $.ajax({
   type: 'POST',
   url: URL + '/chat/auth',
-  // Send session cookie data to chat socket authentication API
+  /* Send session cookie data to chat socket authentication API */
   data: document.cookie
 }).done(function (data) {
   token = data.token;
