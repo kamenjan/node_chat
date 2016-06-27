@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
   } else {
     res.locals.name = 'stranger';
   }
-  res.render('index');
+  res.render('home');
 });
 
 module.exports = router;
