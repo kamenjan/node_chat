@@ -23,7 +23,7 @@ function connect(token) {
   });
 
   socket.on('connect', function (data) {
-   // alert('you are now connected to the websocket server');
+   /* alert('you are now connected to the websocket server'); */
   });
 
   socket.on("message_to_client", function(data) {
@@ -31,8 +31,11 @@ function connect(token) {
                           "<span>" + data['message'] + "</span></div>" );
   });
 
-  socket.on("update_client_list", function(data) {
-    console.log(data);
+  socket.on("update_client_list", function(users) {
+    $("#clients").empty();
+    users.forEach(function(user){
+      $("#clients").append( "<div><p>" + user + "</p></div>" );     
+    });
   });
 
   socket.on('error', function (err) {
@@ -56,6 +59,5 @@ $.ajax({
   data: document.cookie
 }).done(function (data) {
   token = data.token;
-  // TODO unify authentication and document it!
   connect(token);
 });

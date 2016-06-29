@@ -24,15 +24,16 @@ module.exports = function(port) {
     handshake: true
   }));
 
-  /* Connected clients list */
-  var connectedClients = {};
+  /* Connected clients set */
+  var connectedClients = new Set();
 
 	chatSocket.sockets.on('connection', function(socket) {
 		console.log('user connected');
     
-    /* Add client to connectedClients and send list to all clients for update */
-    connectedClients[socket.decoded_token.username] = 'client';
-    chatSocket.sockets.emit("update_client_list" , connectedClients);
+    /* Add clients user name to connectedClients */
+    /* and send list to all clients for update   */
+    connectedClients.add(socket.decoded_token.username);
+    chatSocket.sockets.emit("update_client_list" , Array.from(connectedClients));
 
     var deltaTime = new Date();
 	
@@ -41,14 +42,14 @@ module.exports = function(port) {
       /* Check if 2 seconds have passed since last event to prevent spamming */
       if (new Date() > deltaTime) {
         console.log(data);
-        /* Grab token from clients request object. Use jsonwebtoken    *
-         * to decrypt its content and save this clients username value */
+        /* Grab token from clients request object. Use jsonwebtoken    */
+        /* to decrypt its content and save this clients username value */
         var token = socket.request._query.token;
         var username;
         jwt.verify(token, secret, function(err, decoded) {
           username = decoded.username;
-          /* Escape received string message and send it to    *
-           * all connected sockets. Also store it in database */
+          /* Escape received string message and send it to    */
+          /* all connected sockets. Also store it in database */
           var escaped_message = validator.escape(data["message"]);
           chatSocket.sockets.emit("message_to_client" , 
                                 { author: username, message: escaped_message });
@@ -63,8 +64,11 @@ module.exports = function(port) {
     socket.on('disconnect', function(){
     	console.log('user disconnected');
       /* Remove client from connectedClients and send list to all clients for update */
-      delete connectedClients[socket.decoded_token.username];
-      chatSocket.sockets.emit("update_client_list" , connectedClients);
+      connectedClients.delete(socket.decoded_token.username);
+      chatSocket.sockets.emit(
+        "update_client_list", 
+        Array.from(connectedClients)
+      );
   	});
 	});
 };
