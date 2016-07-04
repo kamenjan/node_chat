@@ -17,10 +17,11 @@
       </div>
     </div>
     <div id="messages">
-      <% messages.forEach( function(element) { %>
+      <% messages.forEach( function(message) { %>
         <div>
-          <span class="author"><%= element['author'] %></span>
-          <span class="message"><%= element['message'] %></span>
+          <span class="time"><%= message[0] %></span>
+          <span class="author"><%= message[1] %></span>
+          <span class="message"><%= message[2] %></span>
         </div>
       <% }); %>
     </div>

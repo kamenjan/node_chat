@@ -24,6 +24,9 @@ module.exports = function(port) {
     handshake: true
   }));
 
+  /* Lightweight JavaScript Library for parsing dates */
+  var momentjs = require('moment');
+
   /* Connected clients set */
   var connectedClients = new Set();
 
@@ -45,14 +48,15 @@ module.exports = function(port) {
         /* Grab token from clients request object. Use jsonwebtoken    */
         /* to decrypt its content and save this clients username value */
         var token = socket.request._query.token;
-        var username;
         jwt.verify(token, secret, function(err, decoded) {
-          username = decoded.username;
-          /* Escape received string message and send it to    */
-          /* all connected sockets. Also store it in database */
+          /* Escape received string message, grab message author, mark */ 
+          /* current time, parse it to HH:mm format and send this data */ 
+          /* to all connected sockets. Also store message in database. */
+          var username = decoded.username;
           var escaped_message = validator.escape(data["message"]);
+          var time = momentjs(Date.now()).format("HH:mm");
           chatSocket.sockets.emit("message_to_client" , 
-                                { author: username, message: escaped_message });
+                                { time: time, author: username, message: escaped_message });
           message_m.storeMessage( username, escaped_message, function (err, id){});
           /* Set time difference (2 seconds from now) for sending new message */
           deltaTime = new Date(new Date().getTime() + 1*2000);

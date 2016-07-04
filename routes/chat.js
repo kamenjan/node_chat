@@ -11,18 +11,27 @@ var authMiddleware = require('../middleware/auth');
 /* We will need our custom object helper for determining if object is 'empty' */
 var isObjectEmpty = require("../helpers/object_helper");
 
+/* Lightweight JavaScript Library for parsing dates */
+var momentjs = require('moment');
+
 /* Socket authentication helper */
 var jwt = require("jsonwebtoken");
 
 /* Require secret for IO token */
 var chatSessionTokenSecret = require('../config/config.js')["session_settings"]['secret'];
 
-/* Main chat GET route. It first uses our custom authentication  *
- * function. If authentication succeeds it grabs all stored chat *
- * messages from message model and sends them to rendered view   */
+/* Main chat GET route. It first uses our custom authentication  */
+/* function. If authentication succeeds it grabs all stored chat */
+/* messages from message model and sends them to rendered view   */
 router.get('/', authMiddleware, function (req, res) {
   message_m.getMessages( function(err, rows) {
-    res.locals.messages = rows;
+    var data = [];
+    /* TODO: use promise, because we might not get all data before sending it */
+    rows.forEach( function(element) {
+      var time = momentjs(element['time']).format("HH:mm");
+      data.push([time, element['author'], element['message']]);
+    });
+    res.locals.messages = data;
     res.render('chat');
   });
 });

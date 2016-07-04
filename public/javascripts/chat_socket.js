@@ -27,10 +27,12 @@ function connect(token) {
   });
 
   socket.on("message_to_client", function(data) {
-    $("#messages").append( "<div><span>" + data['author'] + "</span>" + 
+    $("#messages").append("<div><span>" + data['time'] + "</span>" + 
+                          "<span>" + data['author'] + "</span>" + 
                           "<span>" + data['message'] + "</span></div>" );
   });
 
+  /* Gets triggered by connect/disconnect event on server side socket */
   socket.on("update_client_list", function(users) {
     $("#clients").empty();
     users.forEach(function(user){
