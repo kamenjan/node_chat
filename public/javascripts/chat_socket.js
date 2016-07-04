@@ -27,9 +27,9 @@ function connect(token) {
   });
 
   socket.on("message_to_client", function(data) {
-    $("#messages").append("<div><span>" + data['time'] + "</span>" + 
-                          "<span>" + data['author'] + "</span>" + 
-                          "<span>" + data['message'] + "</span></div>" );
+    $("#messages").append("<div><span> " + data['time'] + " </span> " + 
+                          " <span> " + data['author'] + " </span> " + 
+                          " <span> " + data['message'] + " </span></div>" );
   });
 
   /* Gets triggered by connect/disconnect event on server side socket */
