@@ -5,6 +5,8 @@ var router = express.Router();
 var message_m = require('../models/message');
 var user_m = require('../models/user');
 
+var validator = require('validator');
+
 /* Middleware function for simple authentication via users session cookie */
 var authMiddleware = require('../middleware/auth');
 
@@ -29,7 +31,7 @@ router.get('/', authMiddleware, function (req, res) {
     /* TODO: use promise, because we might not get all data before sending it */
     rows.forEach( function(element) {
       var time = momentjs(element['time']).format("HH:mm");
-      data.push([time, element['author'], element['message']]);
+      data.push([time, element['author'], validator.unescape(element['message'])]);
     });
     res.locals.messages = data;
     res.render('chat');
