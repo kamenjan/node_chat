@@ -44,7 +44,6 @@ module.exports = function(port) {
     socket.on('message_to_server', function(data) {
       /* Check if 2 seconds have passed since last event to prevent spamming */
       if (new Date() > deltaTime) {
-        console.log(data);
         /* Grab token from clients request object. Use jsonwebtoken    */
         /* to decrypt its content and save this clients username value */
         var token = socket.request._query.token;
